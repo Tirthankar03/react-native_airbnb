@@ -37,7 +37,14 @@ const categories = [
     icon: "nature-people",
   },
 ];
-const ExploreHeader = () => {
+
+
+interface Props {
+    onCategoryChanged: (category: string) => void
+}
+
+
+const ExploreHeader = ({onCategoryChanged} : Props) => {
     const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
     const scrollRef = useRef<ScrollView>(null);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -54,6 +61,7 @@ const ExploreHeader = () => {
 
         //responsible for making your device shake
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        onCategoryChanged(categories[index].name);
     }
 
   return (
