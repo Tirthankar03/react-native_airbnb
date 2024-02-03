@@ -4,6 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import * as Haptics from 'expo-haptics';
+
 
 const categories = [
   {
@@ -37,10 +39,21 @@ const categories = [
 ];
 const ExploreHeader = () => {
     const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
+    const scrollRef = useRef<ScrollView>(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
     const selectCategory = (index: number) => {
+        const selected = itemsRef.current[index];
         setActiveIndex(index);
+
+        //gives the measurement of the item inside the view
+        selected?.measure((x) => { 
+            scrollRef.current?.scrollTo({x:x-16, y: 0, animated:true})
+         })
+
+
+        //responsible for making your device shake
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     }
 
   return (
@@ -68,7 +81,7 @@ const ExploreHeader = () => {
 
 
         {/* can't scroll issue android issue*/}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{
+        <ScrollView ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{
             alignItems:'center',
             gap: 20,
             paddingHorizontal:16,
