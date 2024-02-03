@@ -1,41 +1,47 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 
+const categories = [
+  {
+    name: "Tiny homes",
+    icon: "home",
+  },
+  {
+    name: "Cabins",
+    icon: "house-siding",
+  },
+  {
+    name: "Trending",
+    icon: "local-fire-department",
+  },
+  {
+    name: "Play",
+    icon: "videogame-asset",
+  },
+  {
+    name: "City",
+    icon: "apartment",
+  },
+  {
+    name: "Beachfront",
+    icon: "beach-access",
+  },
+  {
+    name: "Countryside",
+    icon: "nature-people",
+  },
+];
 const ExploreHeader = () => {
-  const categories = [
-    {
-      name: "Tiny homes",
-      icon: "home",
-    },
-    {
-      name: "Cabins",
-      icon: "house-siding",
-    },
-    {
-      name: "Trending",
-      icon: "local-fire-department",
-    },
-    {
-      name: "Play",
-      icon: "videogame-asset",
-    },
-    {
-      name: "City",
-      icon: "apartment",
-    },
-    {
-      name: "Beachfront",
-      icon: "beach-access",
-    },
-    {
-      name: "Countryside",
-      icon: "nature-people",
-    },
-  ];
+    const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const selectCategory = (index: number) => {
+        setActiveIndex(index);
+    }
 
   return (
     //flex 1?
@@ -55,11 +61,35 @@ const ExploreHeader = () => {
             </TouchableOpacity>
           </Link>
 
-
           <TouchableOpacity style={styles.filterBtn}>
             <Ionicons name="options-outline" size={24} />
           </TouchableOpacity>
         </View>
+
+
+        {/* can't scroll issue android issue*/}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{
+            alignItems:'center',
+            gap: 20,
+            paddingHorizontal:16,
+        }}>
+            {categories.map((item, index) => (
+                <TouchableOpacity key={index}
+                    onPress={() => selectCategory(index)}
+                    ref={(e) => itemsRef.current[index] = e}
+                    style={activeIndex === index ? styles.categoriesBtnActive : styles.categoriesBtn}
+                >
+                    <MaterialIcons size={24} name={item.icon as any} color={
+                    activeIndex === index ? '#000' : Colors.grey                    } />
+                    <Text 
+                    style={activeIndex === index ? styles.categoryTextActive : styles.categoryText}
+                    
+                    >{item.name}</Text>
+                </TouchableOpacity>
+            ))}
+        </ScrollView>
+
+
       </View>
     </SafeAreaView>
   );
@@ -104,6 +134,30 @@ const styles = StyleSheet.create({
       width: 1,
       height: 1,
     },
+  },
+  categoryText: {
+    fontSize: 14,
+    fontFamily: 'mon-sb',
+    color: Colors.grey,
+  },
+  categoryTextActive: {
+    fontSize: 14,
+    fontFamily: 'mon-sb',
+    color: '#000',
+  },
+  categoriesBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 8,
+  },
+  categoriesBtnActive: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#000',
+    borderBottomWidth: 2,
+    paddingBottom: 8,
   },
 });
 
