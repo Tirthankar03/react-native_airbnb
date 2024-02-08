@@ -8,6 +8,7 @@ import listingsData from '@/assets/data/airbnb-listings.json'
 import ListingsMap from '@/components/ListingsMap'
 import listingsDataGeo from '@/assets/data/airbnb-listings.geo.json';
 import ListingsBottomSheet from '@/components/ListingsBottomSheet'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 
 const Page = () => {
@@ -26,6 +27,9 @@ const Page = () => {
 
   return (
     <View style={{flex:1, marginTop: 130}}>
+          <GestureHandlerRootView 
+    style={{ flex: 1 }}
+    >
       <Stack.Screen options={{
         header: () => <ExploreHeader onCategoryChanged={onDataChanged}/>
       }}/>
@@ -33,6 +37,7 @@ const Page = () => {
 
       <ListingsMap listings={listingsDataGeo}/>
       <ListingsBottomSheet listings={items} category={category}/>
+      </GestureHandlerRootView>
     </View>
   )
 }
