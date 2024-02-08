@@ -18,6 +18,7 @@ const Page = () => {
 
   const [category, setCategory] = useState('Tiny homes')
   const items = useMemo(() => listingsData as any, []);
+  const geoItems = useMemo(() => listingsDataGeo as any, []);
   const onDataChanged = (category: string) => {
     console.log("changed", category );
     setCategory(category)
@@ -26,7 +27,7 @@ const Page = () => {
 
 
   return (
-    <View style={{flex:1, marginTop: 130}}>
+    <View style={{flex:1, marginTop: 80}}>
           <GestureHandlerRootView 
     style={{ flex: 1 }}
     >
@@ -35,7 +36,7 @@ const Page = () => {
       }}/>
       {/* <Listings listings={items} category={category}/> */}
 
-      <ListingsMap listings={listingsDataGeo}/>
+      <ListingsMap listings={geoItems}/>
       <ListingsBottomSheet listings={items} category={category}/>
       </GestureHandlerRootView>
     </View>
